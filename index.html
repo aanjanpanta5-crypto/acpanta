@@ -16,18 +16,18 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center lg:hidden">
-                    <button type="button" class="text-gray-600 hover:text-black focus:outline-none">
+                    <button type="button" id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-gray-600 hover:text-black focus:outline-none">
                         <i class="fa-solid fa-bars text-lg"></i>
                     </button>
                 </div>
 
                 <div class="flex-shrink-0 flex items-center">
                     <a href="#" class="flex items-center">
-                        <img src="logomain.jpeg" alt="ACPANTA Logo" class="h-16 w-auto object-contain" onerror="this.src='https://via.placeholder.com/150x50?text=ACPANTA'">
+                        <img src="img/logomain.jpeg" alt="ACPANTA Logo" class="h-16 w-auto object-contain" onerror="this.src='https://via.placeholder.com/150x50?text=ACPANTA'">
                     </a>
                 </div>
 
-                <nav class="hidden lg:flex space-x-8 text-sm font-medium">
+                <nav id="main-nav" class="hidden lg:flex space-x-8 text-sm font-medium">
                     <a href="#" class="text-black border-b-2 border-black pb-1">Home</a>
                     <a href="#" class="text-gray-500 hover:text-black transition">Men</a>
                     <a href="#" class="text-gray-500 hover:text-black transition">Women</a>
@@ -35,10 +35,6 @@
                 </nav>
 
                 <div class="flex items-center space-x-5">
-
-                  <!-- <button class="text-gray-600 hover:text-black"><i class="fa-solid fa-magnifying-glass text-lg"></i></button>
-                    <button class="text-gray-600 hover:text-black"><i class="fa-regular fa-heart text-lg"></i></button> --> 
-
                     <!-- Cart Button with Live Counter Badge -->
                     <button id="cart-btn" onclick="toggleCart(true)" class="text-gray-600 hover:text-black relative">
                         <i class="fa-solid fa-bag-shopping text-lg"></i>
@@ -46,6 +42,14 @@
                     </button>
                 </div>
             </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-4 space-y-2 shadow-md">
+            <a href="#" class="block text-black font-medium py-2">Home</a>
+            <a href="#" class="block text-gray-600 hover:text-black py-2">Men</a>
+            <a href="#" class="block text-gray-600 hover:text-black py-2">Women</a>
+            <a href="contact.html" class="block text-gray-600 hover:text-black py-2">Contact</a>
         </div>
     </header>
 
@@ -174,6 +178,11 @@
     <script>
         let cart = JSON.parse(localStorage.getItem('acpanta_cart')) || [];
 
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
         function saveCart() {
             localStorage.setItem('acpanta_cart', JSON.stringify(cart));
             renderCart();
@@ -255,7 +264,6 @@
             }
 
             try {
-                // Endpoint connecting to your backend server
                 const response = await fetch('/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -264,7 +272,7 @@
                 
                 const session = await response.json();
                 if (session.url) {
-                    window.location.href = session.url; // Redirects to Secure Checkout Page
+                    window.location.href = session.url;
                 } else {
                     alert('Error creating checkout session.');
                 }
