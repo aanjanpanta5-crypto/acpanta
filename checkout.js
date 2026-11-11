@@ -150,3 +150,21 @@ async function startCheckout() {
         btn.textContent = 'Checkout Now';
     }
 }
+
+// Mobile Menu Toggle Fix
+    const mobileMenuBtn = document.querySelector('header button:has(i.fa-bars)');
+    if (mobileMenuBtn) {
+        // Create mobile navigation dropdown element dynamically
+        const navMenu = document.querySelector('header nav');
+        if (navMenu) {
+            const mobileMenu = document.createElement('div');
+            mobileMenu.className = 'hidden absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-lg flex flex-col p-6 space-y-4 lg:hidden z-50';
+            mobileMenu.innerHTML = navMenu.innerHTML;
+            document.querySelector('header').appendChild(mobileMenu);
+
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    }
