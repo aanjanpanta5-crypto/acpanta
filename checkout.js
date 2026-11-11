@@ -1,7 +1,7 @@
 // Load cart from localStorage
 let cart = JSON.parse(localStorage.getItem('acpanta_cart')) || [];
 
-// 1. Map products from index.html based on prices and titles
+// Map products from index.html based on prices and titles
 const productData = [
     { id: 'p1', name: 'Relaxed Fit Trench Coat', price: 120.00, img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&q=80&w=600' },
     { id: 'p2', name: 'Classic Leather Biker Jacket', price: 240.00, img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&q=80&w=600' },
@@ -10,8 +10,7 @@ const productData = [
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 2. Attach click events to "Quick Add" buttons in index.html
-    const quickAddButtons = document.querySelectorAll('button:has(i.fa-heart) + img + button, .group button:last-child');
+    // Attach click events to "Quick Add" buttons in index.html
     const productCards = document.querySelectorAll('.grid > .group');
 
     productCards.forEach((card, index) => {
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. Attach click event to the Shopping Bag icon in header
+    // Attach click event to the Shopping Bag icon in header
     const cartIconBtn = document.querySelector('header button:has(i.fa-bag-shopping)');
     if (cartIconBtn) {
         cartIconBtn.addEventListener('click', (e) => {
@@ -34,9 +33,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. Inject Cart Drawer into page DOM
+    // Inject Cart Drawer into page DOM
     injectCartDrawer();
     updateCartCount();
+
+    // Mobile Menu Toggle Logic
+    const mobileMenuBtn = document.querySelector('header button:has(i.fa-bars)');
+    if (mobileMenuBtn) {
+        const navMenu = document.querySelector('header nav');
+        if (navMenu) {
+            const mobileMenu = document.createElement('div');
+            mobileMenu.className = 'hidden absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-lg flex flex-col p-6 space-y-4 lg:hidden z-50';
+            mobileMenu.innerHTML = navMenu.innerHTML;
+            document.querySelector('header').appendChild(mobileMenu);
+
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    }
 });
 
 function addToCart(id, name, price, img) {
@@ -150,21 +166,3 @@ async function startCheckout() {
         btn.textContent = 'Checkout Now';
     }
 }
-
-// Mobile Menu Toggle Fix
-    const mobileMenuBtn = document.querySelector('header button:has(i.fa-bars)');
-    if (mobileMenuBtn) {
-        // Create mobile navigation dropdown element dynamically
-        const navMenu = document.querySelector('header nav');
-        if (navMenu) {
-            const mobileMenu = document.createElement('div');
-            mobileMenu.className = 'hidden absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-lg flex flex-col p-6 space-y-4 lg:hidden z-50';
-            mobileMenu.innerHTML = navMenu.innerHTML;
-            document.querySelector('header').appendChild(mobileMenu);
-
-            mobileMenuBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-    }
