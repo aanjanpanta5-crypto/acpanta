@@ -74,9 +74,9 @@
             </div>
             <p class="text-xs text-gray-500">Shipping, taxes, and discounts calculated at checkout.</p>
             <p class="text-xs text-gray-500">By checking out you agree to our <a href="terms.html" class="underline hover:text-black">Terms of Sale</a> and <a href="returns.html" class="underline hover:text-black">Returns Policy</a>. See how we use your details in our <a href="privacy.html" class="underline hover:text-black">Privacy Policy</a>.</p>
-            <button onclick="handleCheckout()" class="w-full bg-black text-white py-3.5 rounded-lg font-medium hover:bg-gray-800 transition shadow-lg flex items-center justify-center space-x-2">
+            <button id="checkout-btn" onclick="handleCheckout()" class="w-full bg-black text-white py-3.5 rounded-lg font-medium hover:bg-gray-800 transition shadow-lg flex items-center justify-center space-x-2 disabled:opacity-60 disabled:cursor-wait">
                 <i class="fa-solid fa-lock text-xs"></i>
-                <span>Checkout Now</span>
+                <span id="checkout-btn-label">Checkout Now</span>
             </button>
         </div>
     </div>
@@ -270,6 +270,16 @@
                 return;
             }
 
+            // Stop double-clicks from starting two checkouts.
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const checkoutLabel = document.getElementById('checkout-btn-label');
+            const resetButton = () => {
+                checkoutBtn.disabled = false;
+                checkoutLabel.textContent = 'Checkout Now';
+            };
+            checkoutBtn.disabled = true;
+            checkoutLabel.textContent = 'Taking you to payment…';
+
             try {
                 // Only product IDs and quantities are sent; the server sets the prices.
                 const items = cart.map(({ id, quantity }) => ({ id, quantity }));
@@ -284,10 +294,12 @@
                     window.location.href = session.url;
                 } else {
                     alert(session.error || 'Error creating checkout session.');
+                    resetButton();
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("Unable to process checkout. Check server connection.");
+                alert("Unable to reach checkout. Please check your connection and try again.");
+                resetButton();
             }
         }
 
