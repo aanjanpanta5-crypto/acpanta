@@ -1,0 +1,9 @@
+# Opens a pull request each week when a package the shop uses has an update,
+# so security fixes in Express, Stripe or dotenv aren't missed.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

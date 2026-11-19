@@ -1,0 +1,6 @@
+# All search engines and crawlers may index the shop.
+# To keep AI training crawlers out, add blocks such as:
+#   User-agent: GPTBot
+#   Disallow: /
+User-agent: *
+Allow: /
