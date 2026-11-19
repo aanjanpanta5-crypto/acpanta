@@ -73,6 +73,7 @@
                 <span id="cart-subtotal">£0.00</span>
             </div>
             <p class="text-xs text-gray-500">Shipping, taxes, and discounts calculated at checkout.</p>
+            <p class="text-xs text-gray-500">By checking out you agree to our <a href="terms.html" class="underline hover:text-black">Terms of Sale</a> and <a href="returns.html" class="underline hover:text-black">Returns Policy</a>. See how we use your details in our <a href="privacy.html" class="underline hover:text-black">Privacy Policy</a>.</p>
             <button onclick="handleCheckout()" class="w-full bg-black text-white py-3.5 rounded-lg font-medium hover:bg-gray-800 transition shadow-lg flex items-center justify-center space-x-2">
                 <i class="fa-solid fa-lock text-xs"></i>
                 <span>Checkout Now</span>
@@ -169,8 +170,14 @@
 
     <!-- Footer -->
     <footer class="bg-black text-white pt-16 pb-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500">
-            &copy; 2026 ACPANTA Fashion Store. All rights reserved.
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-3">
+            <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-gray-400">
+                <a href="contact.html" class="hover:text-white transition">Contact Us</a>
+                <a href="returns.html" class="hover:text-white transition">Shipping &amp; Returns</a>
+                <a href="terms.html" class="hover:text-white transition">Terms of Sale</a>
+                <a href="privacy.html" class="hover:text-white transition">Privacy Policy</a>
+            </nav>
+            <p>&copy; 2026 ACPANTA Fashion Store. All rights reserved.</p>
         </div>
     </footer>
 
@@ -264,17 +271,19 @@
             }
 
             try {
+                // Only product IDs and quantities are sent; the server sets the prices.
+                const items = cart.map(({ id, quantity }) => ({ id, quantity }));
                 const response = await fetch('/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ items: cart })
+                    body: JSON.stringify({ items })
                 });
-                
+
                 const session = await response.json();
                 if (session.url) {
                     window.location.href = session.url;
                 } else {
-                    alert('Error creating checkout session.');
+                    alert(session.error || 'Error creating checkout session.');
                 }
             } catch (error) {
                 console.error("Error:", error);

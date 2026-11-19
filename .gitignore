@@ -1,0 +1,16 @@
+# Secrets: never commit these
+.env
+.env.*
+!.env.example
+
+# Installed packages and logs
+node_modules/
+npm-debug.log*
+*.log
+
+# Security audit notes (lists the site's weaknesses)
+AUDIT.md
+
+# System files
+.DS_Store
+Thumbs.db
